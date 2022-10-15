@@ -6,7 +6,11 @@
   "type": "module",
   "scripts": {
     "server": "nodemon server",
-    "app": "npm start --prefix app"
+    "app": "npm start --prefix app",
+    "build": "npm run build --prefix app",
+    "install-app": "npm install --legacy-peer-deps --prefix app",
+    "start": "node server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run install-app && npm run build"
   },
   "keywords": [],
   "author": "",
