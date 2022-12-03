@@ -5,11 +5,14 @@ const configDb = async (uri) => {
         await mongoose.connect(uri, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            
             retryWrites: false
         })
         console.log(`MongoDB connected successfully...`)
     } catch (error) {
         console.log(error.message);
+        
+
     }
 }
 

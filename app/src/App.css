@@ -1,6 +1,6 @@
-.App {
+.App { 
   text-align: center;
-  
+  background-image: url("https://www.intelligentcio.com/africa/wp-content/uploads/sites/5/2018/12/Service-Management.jpg")
 }
 
 .App-logo {
@@ -10,23 +10,23 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    animation: App-logo-spin infinite 30s linear;
   }
 }
-
 .App-header {
-  background-color: #282c34;
+  background-color:#ff9e36;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: black;
 }
 
+
 .App-link {
-  color: #61dafb;
+  color: #ff9e36;
 }
 
 @keyframes App-logo-spin {
@@ -36,4 +36,7 @@
   to {
     transform: rotate(360deg);
   }
+}    
+.Typography {
+  background-color: lawngreen
 }

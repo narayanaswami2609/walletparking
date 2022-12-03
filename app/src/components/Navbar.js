@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import {  useNavigate } from 'react-router-dom';
 
+
 const pages = ['Login', 'Registration', 'Rating'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -51,7 +52,7 @@ const navigate = useNavigate()
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
-              letterSpacing: '.3rem',
+              letterSpacing: '.4rem',  
               color: 'inherit',
               textDecoration: 'none',
             }}
@@ -67,6 +68,7 @@ const navigate = useNavigate()
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
               color="inherit"
+            
             >
               <MenuIcon />
             </IconButton>
@@ -107,12 +109,12 @@ const navigate = useNavigate()
               flexGrow: 1,
               fontFamily: 'monospace',
               fontWeight: 700,
-              letterSpacing: '.3rem',
+              letterSpacing: '.4rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
           >
-            LOGO
+            
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -127,7 +129,7 @@ const navigate = useNavigate()
                 
                 }
 
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: 'black', display: 'block' }}
               >
                 {page}
               </Button>

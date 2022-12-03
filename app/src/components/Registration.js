@@ -8,7 +8,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import memories from "./images/memories.png";
+
 import Button from "@material-ui/core/Button";
 
 import axios from "axios";

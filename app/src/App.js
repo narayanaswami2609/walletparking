@@ -15,7 +15,7 @@ function App() {
   return ( 
     <div className='App'> 
     
-    <style>{'body { background-color: lightOrange; }'}</style>
+    <style>{'body { background-color: white; }'}</style>
     <Router>
     <Navbar/>
    
@@ -24,7 +24,7 @@ function App() {
       <Route path='Registration' element={<Registration/>}/>
   
       
-      <Route path='Rating' element={<Rating/>}/>
+      <Route path='Rating' element={<Rating/>} style={{}}/>
       
     </Routes>
     </Router>
