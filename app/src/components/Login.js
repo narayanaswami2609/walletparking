@@ -5,45 +5,68 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-
-function Copyright(props) {
-
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { useNavigate, Link, Navigate } from 'react-router-dom';
+import axios from 'axios';
+import { useSelector, useDispatch } from "react-redux";
+import { errorMessage, successMessage } from './validations';
+import { LOGIN } from '../constants';
+import { dispatchLogin } from '../actions/authAction';
 
 const theme = createTheme();
 
 export default function SignIn() {
+  const [values, setValues] = React.useState({
+    email: '',
+    password: '',
+    err:'',
+    success:''
+  })
   const navigate = useNavigate()
-  const handleSubmit = (event) => {
+
+  const { email, password, err, success } = values;
+
+  const dispatch = useDispatch()
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setValues({ ...values, [name]: value, err: '', success: '' })
+  }
+
+  const handleSubmit = async(event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+    try {
+      const res = await axios.get('/user/login', {
+        params:{
+          email, password
+        } 
+      }) 
+      setValues({ ...values, err: "", success: res?.data?.msg })
+      dispatch(dispatchLogin())
+      window.sessionStorage.setItem('token', res.data.token)
+      if (res) {
+        setTimeout(() => {
+          navigate('/home')
+        }, 2000);
+      }
+    } catch (err) {
+        err.response?.data?.msg &&
+            setValues({ ...values, err: err.response?.data?.msg, success: '' })
+    }
   };
 
   return (
     <ThemeProvider theme={theme}>
+      {/* <form> */}
       <Container component="main" maxWidth="xs">
+        {err && errorMessage(err) }
+        {success && successMessage(success) }
         <CssBaseline />
         <Box
           sx={{
@@ -68,7 +91,8 @@ export default function SignIn() {
               label="Email Address"
               name="email"
               autoComplete="email"
-              autoFocus
+              value={email}
+              onChange={handleInputChange}
             />
             <TextField
               margin="normal"
@@ -78,8 +102,9 @@ export default function SignIn() {
               label="Password"
               type="password"
               id="password"
-              autoComplete="current-password"
-            />
+              value={password}
+              onChange={handleInputChange}
+            />    
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
@@ -98,22 +123,17 @@ export default function SignIn() {
                   Forgot password?
                 </Link>
               </Grid>
-
-
                 <Grid item>
-                  <Link  variant="body2">
-
-              <div onclick={() => navigate("/Registration")}>
-                    {"Don't have an account? Sign Up"}
-              </div>
+                  <Link to='/Registration'  variant="body2">
+                    "Don't have an account? Sign Up"
                   </Link>
                 </Grid>
 
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
+      {/* </form> */}
     </ThemeProvider>
   );
 }  

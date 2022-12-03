@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import {  useNavigate } from 'react-router-dom';
-
+import { useSelector, useDispatch } from "react-redux";
 
 const pages = ['Login', 'Registration', 'Rating'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -21,6 +21,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const { isLogged } = useSelector(state => state?.auth)
 const navigate = useNavigate()
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -157,11 +158,42 @@ const navigate = useNavigate()
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+              {/* {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
-              ))}
+              ))} */}
+              <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">Profile</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">Account</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">Dashboard</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}>
+                  {
+                      isLogged ? 
+                      <Typography 
+                    textAlign="center"
+                    onClick={() => {
+                      window.sessionStorage.removeItem('token')
+                      navigate('/')
+                      window.location.reload()
+                    }}
+                  
+                  >Logout</Typography> : 
+                  <Typography 
+                    textAlign="center"
+                    onClick={() => {
+                      navigate('/Login')
+                    }}
+                  
+                  >Login</Typography>
+                  }
+                  
+                </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

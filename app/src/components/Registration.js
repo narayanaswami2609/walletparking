@@ -12,6 +12,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 
 import axios from "axios";
+import { errorMessage, isEmail, isEmpty, isLength, isMatch, successMessage } from "./validations";
+import { Link, useNavigate } from "react-router-dom";
 const defaultValues = {
   name: "",
   age: 0,
@@ -19,18 +21,21 @@ const defaultValues = {
   os: "",
   phoneNumber: 0,
   email:"",
-  password:""
-
+  password:"",
+  confirmPassword: "",
+  err: '',
+  success: ''
 };
+
 const Form = () => {
   const [formValues, setFormValues] = useState(defaultValues);
-  console.log(formValues)
+
+  const navigate = useNavigate()
+  const {name, password, err, success, confirmPassword, age, email } = formValues;
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
+    const { name, value } = e.target
+        setFormValues({ ...formValues, [name]: value, err: '', success: '' })
   };
   const handleSliderChange = (name) => (e, value) => {
     setFormValues({
@@ -40,15 +45,38 @@ const Form = () => {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await axios.get("/")
-    await axios.post("/user/register", formValues)
-    console.log(formValues);
+    
+    if (isEmpty(name) || isEmpty(password) || isEmpty(email) || isEmpty(age))
+      return setFormValues({ ...formValues, err: "name, password, email, age, mobile number required.", success: '' })
+
+    if (!isEmail(email))
+        return setFormValues({ ...formValues, err: "Invalid email address.", success: '' })
+
+    if (isLength(password))
+        return setFormValues({ ...formValues, err: "Password must be at least 6 characters.", success: '' })
+
+    if (!isMatch(password, confirmPassword))
+        return setFormValues({ ...formValues, err: "Password did not match.", success: '' })
+
+    try {
+      const res = await axios.post("/user/register", formValues)
+      setFormValues({ ...formValues, err: "", success: res.data.msg })
+
+      setTimeout(() => {
+        navigate('/login')
+      }, 5000);
+      console.log(formValues);
+    } catch (err) {
+        err.response.data.msg &&
+            setFormValues({ ...formValues, err: err.response.data.msg, success: '' })
+    }
   };
+
   return (
     <form onSubmit={handleSubmit}>
-      
+      {err && errorMessage(err)}
+      {success && successMessage(success)}
       <Grid container alignItems="center" justify="center" direction="column">
-      
         <Grid item>
           <TextField
             id="name-input"
@@ -76,6 +104,16 @@ const Form = () => {
             first label="password"
             type="password"
             value={formValues.password}
+            onChange={handleInputChange}
+          />
+        </Grid>
+        <Grid item>
+          <TextField
+            id="name-input"
+            last name="confirmPassword"
+            first label="confirm password"
+            type="password"
+            value={formValues.confirmPassword}
             onChange={handleInputChange}
           />
         </Grid>
@@ -154,6 +192,11 @@ const Form = () => {
         <Button variant="contained" color="secondary" type="submit">
           Submit
         </Button>
+        <Grid item>
+          <Link to='/Login'  variant="body2">
+            already have an account
+          </Link>
+        </Grid>
       </Grid>
     </form>
   );
